@@ -1,6 +1,9 @@
-const { leerInput, inquirerMenu, pausa } = require("./helpers/inquirer");
+require('dotenv').config();
+
+const { leerInput, inquirerMenu, pausa, listarLugares } = require("./helpers/inquirer");
 const Busquedas = require("./models/busquedas");
 
+// console.log(process.env.MAPBOX_KEY);
 
 const main = async () => {
 
@@ -22,22 +25,48 @@ const main = async () => {
             case 1:
                 //Mostrar mensaje
                 const lugar = await leerInput("Ciudad: ");
-                console.log(lugar);
+                // console.log(lugar);
                 //Buscar los lugares
+                const lugares = await busquedas.ciudad(lugar);
+                // console.log(lugares);
 
                 //Seleccionar el lugar
+                const id = await listarLugares(lugares);
+                if (id === '0') continue;
+                // console.log({ id });
+
+                const lugarSel = lugares.find(lugar => lugar.id === id);
+                busquedas.agregarHistorial(lugarSel.nombre);
+                //console.log(lugarSel);
 
                 //Clima
+                const clima = await busquedas.climaLugar(lugarSel.lat, lugarSel.lng);
+                //console.log(">>> clima ciudad : ", clima);
 
                 //Mostrar resultados
                 console.log("\nInformacion de la ciudad\n".green);
-                console.log("Ciudad: ",);
-                console.log("Lat: ",);
-                console.log("Long: ",);
-                console.log("Temperatura: ",);
-                console.log("Minima: ",);
-                console.log("Maxima: ",);
+                console.log("Ciudad: ", lugarSel.nombre.green);
+                console.log("Lat: ", lugarSel.lat);
+                console.log("Long: ", lugarSel.lng);
+                console.log("Temperatura: ", clima.temp);
+                console.log("Minima: ", clima.min);
+                console.log("Maxima: ", clima.max);
+                console.log("Como esta el clima: ", clima.desc.green);
 
+
+                break;
+
+            case 2:
+                //busqueda llamar historial Capitalizado
+                busquedas.historialCapitalizado.forEach((lugar, i) => {
+                    const idx = `${i + 1}.`.green;
+                    console.log(`${idx} ${lugar}`);
+                });
+                /*
+                busquedas.historial.forEach((lugar, i) => {
+                    const idx = `${i + 1}.`.green;
+                    console.log(`${idx} ${lugar}`);
+                });*/
 
                 break;
 
