@@ -17,7 +17,7 @@ app.use(express.static('public'))
     res.send('Home page');
 }); */
 
-app.get('/', (req, res) => {
+/* app.get('/', (req, res) => {
     res.render('home', {
         nombre: 'Felix',
         titulo: 'Curso de Node'
@@ -36,11 +36,11 @@ app.get('/elements', (req, res) => {
         nombre: 'Felix',
         titulo: 'Curso de Node'
     });
-});
+}); */
 
 app.get('*', (req, res) => {
     // res.send('404 | page not found');
-    res.sendFile(__dirname + '/public/404.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(port, () => {
